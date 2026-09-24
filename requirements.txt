@@ -1,2 +1,6 @@
 fastapi
 uvicorn
+email-validator
+psycopg[binary]
+python-dotenv
+pwdlib[argon2]

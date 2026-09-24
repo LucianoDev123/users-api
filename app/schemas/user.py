@@ -28,3 +28,16 @@ class UserResponse(BaseModel):
     avatar: str | None = None
     rol: UserRole
     estado: bool
+
+class UserUpdate(BaseModel):
+    nombre: str
+    apellido: str
+    username: str
+    email: EmailStr
+    avatar: str | None= None
+    rol: UserRole = UserRole.usuario
+
+class LoginRequest(BaseModel):
+    email: EmailStr
+    password: str
+
