@@ -27,7 +27,7 @@ def get_users():
         with conn.cursor() as cursor:
             cursor.execute(
                 """
-                SELECT id, nombre, apellido, username, email, rol, estado
+                SELECT id, nombre, apellido, username, email, avatar, rol, estado
                 FROM usuarios
                 ORDER BY id
                 """

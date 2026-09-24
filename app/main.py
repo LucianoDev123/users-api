@@ -32,12 +32,26 @@ def create_user_endpoint(user: UserCreate):
         "estado": True,
     }
 
-@app.get("/users")
+@app.get("/users", response_model=list[UserResponse])
 def list_users():
-    return get_users()
+    users = get_users()
 
-@app.get("/users/{user_id}")
-def get_user_endpoint(user_id:int):
+    return [
+        {
+            "id": user[0],
+            "nombre": user[1],
+            "apellido": user[2],
+            "username": user[3],
+            "email": user[4],
+            "avatar": user[5],
+            "rol": user[6],
+            "estado": user[7],
+        }
+        for user in users
+    ]
+
+@app.get("/users/{user_id}", response_model=UserResponse)
+def get_user_endpoint(user_id: int):
     user = get_user(user_id)
 
     if user is None:
@@ -45,20 +59,42 @@ def get_user_endpoint(user_id:int):
             status_code=404,
             detail="Usuario no encontrado"
         )
-    return user
+
+    return {
+        "id": user[0],
+        "nombre": user[1],
+        "apellido": user[2],
+        "username": user[3],
+        "email": user[4],
+        "avatar": user[5],
+        "rol": user[6],
+        "estado": user[7],
+    }
 
 
-@app.put("/users/{user_id}")
-def update_user_endpoint(user_id:int , user:UserUpdate):
+@app.put("/users/{user_id}", response_model=UserResponse)
+def update_user_endpoint(user_id: int, user: UserUpdate):
+
     updated_user = update_user(user_id, user)
 
-    if update_user is None:
+    if updated_user is None:
         raise HTTPException(
-            status_code = 404,
-            detail= "Usuario no encontrado"
+            status_code=404,
+            detail="Usuario no encontrado"
         )
-    
-    return get_user(user_id)
+
+    updated_user = get_user(user_id)
+
+    return {
+        "id": updated_user[0],
+        "nombre": updated_user[1],
+        "apellido": updated_user[2],
+        "username": updated_user[3],
+        "email": updated_user[4],
+        "avatar": updated_user[5],
+        "rol": updated_user[6],
+        "estado": updated_user[7],
+    }
 
 @app.delete("/users/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_user_endpoint(user_id:int):
